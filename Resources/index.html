@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <style>
+        :root {
+            --sidebar-bg: #1a202c;
+            --sidebar-text: #f7fafc;
+            --accent-color: #0d9488;
+            --accent-hover: #0f766e;
+            --content-bg: #111827;
+            --card-bg: #1f2937;
+            --text-color: #e2e8f0;
+            --border-color: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --empty-bg: #1f2937;
+            --empty-border: #374151;
+            --empty-text: #9ca3af;
+            --table-stripe: #1a1a1a;
+            --table-hover: #2d3748;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --code-border: #334155;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--content-bg);
+            color: var(--text-color);
+            overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: auto;
+            max-width: var(--sidebar-width);
+            min-width: 200px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar-section {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-section>span {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+            color: var(--accent-color);
+            padding: 8px 0;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-section>span .icon {
+            margin-right: 8px;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-section ul {
+            margin-left: 28px;
+            margin-top: 5px;
+        }
+
+        .sidebar-section ul li {
+            margin: 8px 0;
+        }
+
+        .sidebar-section ul li a {
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-section ul li a:hover {
+            color: var(--accent-color);
+        }
+
+
+
+        /* Content area */
+        .content {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section h2 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .section h2 .icon {
+            margin-right: 10px;
+            color: var(--accent-color);
+            width: 24px;
+            height: 24px;
+            transition: color 0.3s ease;
+        }
+
+        .content p {
+            line-height: 1.6;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .empty-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            background-color: var(--empty-bg);
+            border: 1px dashed var(--empty-border);
+            border-radius: 6px;
+            color: var(--empty-text);
+            font-style: italic;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Code output box */
+        .code-output {
+            background-color: var(--code-bg);
+            border: 1px solid var(--code-border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            overflow-x: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .code-output pre {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--code-text);
+            white-space: pre-wrap;
+            /* CSS3 */
+            word-wrap: break-word;
+            /* Internet Explorer 5.5+ */
+            transition: color 0.3s ease;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 5px 5px;
+            text-align: left;
+            vertical-align: top;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            word-wrap: break-word;
+            white-space: pre-line;
+            max-width: 360px;
+        }
+
+        table th {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        table tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        table tr:nth-child(even) {
+            background-color: var(--table-stripe);
+            transition: background-color 0.3s ease;
+        }
+
+        table tr:hover {
+            background-color: var(--table-hover);
+            transition: background-color 0.3s ease;
+        }
+
+        table td {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+
+        /* SVG icon styles */
+        .svg-icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+            vertical-align: middle;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG icon definitions -->
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <!-- Theme icons -->
+            <symbol id="icon-moon" viewBox="0 0 24 24">
+                <path
+                    d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z">
+                </path>
+            </symbol>
+            <symbol id="icon-sun" viewBox="0 0 24 24">
+                <path
+                    d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM11 2h2v2h-2V2zM11 20h2v2h-2v-2zM2 11h2v2H2v-2zM20 11h2v2h-2v-2zM5.99 4.58l1.42 1.42-1.42 1.41-1.41-1.41 1.41-1.42zM18.01 4.58l1.41 1.42-1.41 1.41-1.42-1.41 1.42-1.42zM5.99 19.42l1.42-1.42-1.42-1.41-1.41 1.41 1.41 1.42zM18.01 19.42l1.41-1.42-1.41-1.41-1.42 1.41 1.42 1.42z">
+                </path>
+            </symbol>
+            <!-- Network icons -->
+            <symbol id="icon-network" viewBox="0 0 24 24">
+                <path d="M4 20h16v-8H4v8zm2-6h12v4H6v-4zm-2-4h16V4H4v6zm2-4h12v2H6V6z"></path>
+            </symbol>
+            <!-- User icons -->
+            <symbol id="icon-users" viewBox="0 0 24 24">
+                <path
+                    d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z">
+                </path>
+            </symbol>
+            <!-- Process icons -->
+            <symbol id="icon-process" viewBox="0 0 24 24">
+                <path
+                    d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z">
+                </path>
+            </symbol>
+            <!-- Directory icons -->
+            <symbol id="icon-folder" viewBox="0 0 24 24">
+                <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z">
+                </path>
+            </symbol>
+            <!-- File icons -->
+            <symbol id="icon-file" viewBox="0 0 24 24">
+                <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z">
+                </path>
+            </symbol>
+            <!-- System icons -->
+            <symbol id="icon-system" viewBox="0 0 24 24">
+                <path
+                    d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z">
+                </path>
+            </symbol>
+            <!-- Route icons -->
+            <symbol id="icon-route" viewBox="0 0 24 24">
+                <path
+                    d="M19.15 8.65l-7.3-7.3c-.4-.4-1.05-.4-1.45 0l-7.3 7.3c-.4.4-.4 1.05 0 1.45l7.3 7.3c.4.4 1.05.4 1.45 0l7.3-7.3c.4-.4.4-1.05 0-1.45zM12 18.25l-6.25-6.25L12 5.75l6.25 6.25L12 18.25z">
+                </path>
+            </symbol>
+            <!-- Connection status icons -->
+            <symbol id="icon-connection" viewBox="0 0 24 24">
+                <path
+                    d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z">
+                </path>
+            </symbol>
+            <!-- DNS icons -->
+            <symbol id="icon-dns" viewBox="0 0 24 24">
+                <path
+                    d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 19c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z">
+                </path>
+            </symbol>
+            <!-- User list icons -->
+            <symbol id="icon-user-list" viewBox="0 0 24 24">
+                <path
+                    d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z">
+                </path>
+            </symbol>
+            <!-- Login user icons -->
+            <symbol id="icon-login" viewBox="0 0 24 24">
+                <path
+                    d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z">
+                </path>
+            </symbol>
+            <!-- Process list icons -->
+            <symbol id="icon-process-list" viewBox="0 0 24 24">
+                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"></path>
+            </symbol>
+            <!-- Service list icons -->
+            <symbol id="icon-service" viewBox="0 0 24 24">
+                <path
+                    d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z">
+                </path>
+            </symbol>
+            <!-- Start menu icons -->
+            <symbol id="icon-start-menu" viewBox="0 0 24 24">
+                <path
+                    d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z">
+                </path>
+            </symbol>
+            <!-- Recent file icons -->
+            <symbol id="icon-recent" viewBox="0 0 24 24">
+                <path
+                    d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z">
+                </path>
+            </symbol>
+            <!-- Desktop icons -->
+            <symbol id="icon-desktop" viewBox="0 0 24 24">
+                <path
+                    d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z">
+                </path>
+            </symbol>
+            <!-- Documents icons -->
+            <symbol id="icon-documents" viewBox="0 0 24 24">
+                <path
+                    d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z">
+                </path>
+            </symbol>
+            <!-- SSH icons -->
+            <symbol id="icon-ssh" viewBox="0 0 24 24">
+                <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z">
+                </path>
+            </symbol>
+            <!-- IIS icons -->
+            <symbol id="icon-iis" viewBox="0 0 24 24">
+                <path
+                    d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 19c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z">
+                </path>
+            </symbol>
+            <!-- PowerShell icons -->
+            <symbol id="icon-powershell" viewBox="0 0 24 24">
+                <path
+                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z">
+                </path>
+            </symbol>
+            <!-- System info icons -->
+            <symbol id="icon-info" viewBox="0 0 24 24">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
+                </path>
+            </symbol>
+            <!-- hosts file icons -->
+            <symbol id="icon-hosts" viewBox="0 0 24 24">
+                <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z">
+                </path>
+            </symbol>
+            <!-- RDP icons -->
+            <symbol id="icon-rdp" viewBox="0 0 24 24">
+                <path
+                    d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z">
+                </path>
+            </symbol>
+        </defs>
+    </svg>
+
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h2>Contents</h2>
+            <ul>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-network"></use>
+                            </svg>
+                        </span>
+                        Network
+                    </span>
+                    <ul>
+                        <li><a href="#network-card">Interface</a></li>
+                        <li><a href="#network-route">Route</a></li>
+                        <li><a href="#network-tcp">TCP</a></li>
+                        <li><a href="#network-udp">UDP</a></li>
+                        <li><a href="#network-dns">DNSCache</a></li>
+                        <li><a href="#network-wifi">WIFI</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-users"></use>
+                            </svg>
+                        </span>
+                        Users
+                    </span>
+                    <ul>
+                        <li><a href="#user-list">User</a></li>
+                        <li><a href="#user-login">LoggedUser</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-process"></use>
+                            </svg>
+                        </span>
+                        Processes
+                    </span>
+                    <ul>
+                        <li><a href="#process-list">Process</a></li>
+                        <li><a href="#process-service">Service</a></li>
+                        <li><a href="#process-av">AV</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-folder"></use>
+                            </svg>
+                        </span>
+                        Directories
+                    </span>
+                    <ul>
+                        <li><a href="#directory-programs">Start Menu Programs</a></li>
+                        <li><a href="#directory-recent">Recent Files</a></li>
+                        <li><a href="#directory-explorer">Explorer History</a></li>
+                        <li><a href="#directory-desktop">Desktop</a></li>
+                        <li><a href="#directory-documents">Documents</a></li>
+                        <li><a href="#directory-ssh">SSH</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-file"></use>
+                            </svg>
+                        </span>
+                        Files
+                    </span>
+                    <ul>
+                        <li><a href="#system-hosts">Hosts File</a></li>
+                        <li><a href="#file-iis">IIS Configuration</a></li>
+                        <li><a href="#file-powershell">PowerShell History</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-system"></use>
+                            </svg>
+                        </span>
+                        Cred
+                    </span>
+                    <ul>
+                        <li><a href="#system-rdp">RDP</a></li>
+                        <li><a href="#system-putty">Putty</a></li>
+                        <li><a href="#system-filezilla">FileZilla</a></li>
+                        <li><a href="#system-xmanager">Xmanager</a></li>
+                        <li><a href="#system-winscp">WinSCP</a></li>
+                        <li><a href="#system-finalshell">FinalShell</a></li>
+                        <li><a href="#system-securecrt">SecureCRT</a></li>
+                        <li><a href="#system-navicat">Navicat</a></li>
+                        <li><a href="#system-dbeaver">DBeaver</a></li>
+                        <li><a href="#system-browser">Browser</a></li>
+                        <li><a href="#system-credential">Windows Credential</a></li>
+                        <li><a href="#system-openvpn">OpenVPN</a></li>
+                        <li><a href="#system-tightvnc">TightVNC</a></li>
+                        <li><a href="#system-ultravnc">UltraVNC</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-section">
+                    <span>
+                        <span class="icon">
+                            <svg class="svg-icon">
+                                <use xlink:href="#icon-system"></use>
+                            </svg>
+                        </span>
+                        System
+                    </span>
+                    <ul>
+                        <li><a href="#system-info">System Information</a></li>
+                        <li><a href="#system-drive">Drive</a></li>
+                        <li><a href="#system-product">Product</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Content area -->
+        <div class="content">
+            <div id="network-card" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-network"></use>
+                        </svg>
+                    </span>
+                    Interface
+                </h2>
+                <div class="table-responsive">
+                    {interface}
+                </div>
+            </div>
+
+            <div id="network-route" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-route"></use>
+                        </svg>
+                    </span>
+                    Routes
+                </h2>
+                <div class="table-responsive">
+                    {route}
+                </div>
+            </div>
+
+            <div id="network-tcp" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-connection"></use>
+                        </svg>
+                    </span>
+                    TCP
+                </h2>
+                <div class="table-responsive">
+                    {tcp}
+                </div>
+
+            </div>
+            <div id="network-udp" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-connection"></use>
+                        </svg>
+                    </span>
+                    UDP
+                </h2>
+                <div class="table-responsive">
+                    {udp}
+                </div>
+            </div>
+            <div id="network-dns" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-dns"></use>
+                        </svg>
+                    </span>
+                    DNSCache
+                </h2>
+                <div class="table-responsive">
+                    {dns}
+                </div>
+            </div>
+            <div id="network-wifi" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-wifi"></use>
+                        </svg>
+                    </span>
+                    WIFI
+                </h2>
+                <div class="table-responsive">
+                    {wifi}
+                </div>
+            </div>
+
+            <div id="user-list" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-user-list"></use>
+                        </svg>
+                    </span>
+                    User List
+                </h2>
+                <div class="table-responsive">
+                    {user}
+                </div>
+            </div>
+
+            <div id="user-login" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-login"></use>
+                        </svg>
+                    </span>
+                    Logged In Users
+                </h2>
+                <div class="table-responsive">
+                    {quser}
+                </div>
+            </div>
+
+            <div id="process-list" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-process-list"></use>
+                        </svg>
+                    </span>
+                    Process List
+                </h2>
+                <div class="table-responsive">
+                    {process}
+                </div>
+            </div>
+
+            <div id="process-service" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-service"></use>
+                        </svg>
+                    </span>
+                    Service List
+                </h2>
+                <div class="table-responsive">
+                    {service}
+                </div>
+            </div>
+            <div id="process-av" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-service"></use>
+                        </svg>
+                    </span>
+                    AV List
+                </h2>
+                <div class="table-responsive">
+                    {av}
+                </div>
+            </div>
+            <div id="directory-programs" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-start-menu"></use>
+                        </svg>
+                    </span>
+                    Start Menu Programs
+                </h2>
+                <div class="table-responsive">
+                    {programs}
+                </div>
+            </div>
+
+            <div id="directory-recent" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-recent"></use>
+                        </svg>
+                    </span>
+                    Recent Files
+                </h2>
+                <div class="table-responsive">
+                    {recent}
+                </div>
+            </div>
+            <div id="directory-explorer" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-recent"></use>
+                        </svg>
+                    </span>
+                    Explorer History
+                </h2>
+                <div class="table-responsive">
+                    {explorer}
+                </div>
+            </div>
+
+            <div id="directory-desktop" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-desktop"></use>
+                        </svg>
+                    </span>
+                    Desktop
+                </h2>
+                <div class="table-responsive">
+                    {desktop}
+                </div>
+            </div>
+
+            <div id="directory-documents" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-documents"></use>
+                        </svg>
+                    </span>
+                    Documents
+                </h2>
+                <div class="table-responsive">
+                    {documents}
+                </div>
+            </div>
+
+            <div id="directory-ssh" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-ssh"></use>
+                        </svg>
+                    </span>
+                    SSH Directory (.ssh)
+                </h2>
+                <div class="table-responsive">
+                    {ssh}
+                </div>
+            </div>
+            <div id="system-hosts" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-hosts"></use>
+                        </svg>
+                    </span>
+                    Hosts File
+                </h2>
+                <div class="code-output">
+                    <pre>{hosts}</pre>
+                </div>
+            </div>
+            <div id="file-iis" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-iis"></use>
+                        </svg>
+                    </span>
+                    IIS Configuration
+                </h2>
+                <div class="code-output">
+                    <pre>{iis}</pre>
+                </div>
+            </div>
+
+            <div id="file-powershell" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-powershell"></use>
+                        </svg>
+                    </span>
+                    PowerShell History
+                </h2>
+                <div class="code-output">
+                    <pre>{powershell}</pre>
+                </div>
+            </div>
+            <div id="system-rdp" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    RDP
+                </h2>
+                <div class="table-responsive">
+                    {rdp}
+                </div>
+            </div>
+            <div id="system-putty" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    Putty
+                </h2>
+                <div class="table-responsive">
+                    {putty}
+                </div>
+            </div>
+            <div id="system-filezilla" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    FileZilla
+                </h2>
+                <div class="table-responsive">
+                    {filezilla}
+                </div>
+            </div>
+            <div id="system-xmanager" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    Xmanager
+                </h2>
+                <div class="table-responsive">
+                    {xmanager_session}
+                </div>
+                <div class="table-responsive">
+                    {xmanager_key}
+                </div>
+            </div>
+            <div id="system-winscp" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    WinSCP
+                </h2>
+                <div class="table-responsive">
+                    {winscp}
+                </div>
+            </div>
+            <div id="system-finalshell" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    FinalShell
+                </h2>
+                <div class="table-responsive">
+                    {finalshell}
+                </div>
+                <div class="table-responsive">
+                    {finalshellkey}
+                </div>
+            </div>
+            <div id="system-securecrt" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    SecureCRT
+                </h2>
+                <div class="table-responsive">
+                    {securecrt}
+                </div>
+            </div>
+            <div id="system-navicat" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    Navicat
+                </h2>
+                <div class="table-responsive">
+                    {navicat}
+                </div>
+                <div class="table-responsive">
+                    {navicatkey}
+                </div>
+            </div>
+            <div id="system-dbeaver" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    DBeaver
+                </h2>
+                <div class="code-output">
+                    <pre>{dbeaver}</pre>
+                </div>
+            </div>
+            
+            <div id="system-browser" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    Browser
+                </h2>
+                <div class="table-responsive">
+                    {browser}
+                </div>
+            </div>
+            <div id="system-credential" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    Windows Credential
+                </h2>
+                <div class="table-responsive">
+                    {credential}
+                </div>
+            </div>
+            <div id="system-openvpn" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    OpenVPN
+                </h2>
+                <div class="table-responsive">
+                    {openvpn}
+                </div>
+            </div>
+            <div id="system-tightvnc" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    TightVNC
+                </h2>
+                <div class="table-responsive">
+                    {tightvnc}
+                </div>
+            </div>
+            <div id="system-ultravnc" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-rdp"></use>
+                        </svg>
+                    </span>
+                    UltraVNC
+                </h2>
+                <div class="table-responsive">
+                    {ultravnc}
+                </div>
+            </div>
+            <div id="system-info" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-info"></use>
+                        </svg>
+                    </span>
+                    System Information
+                </h2>
+                <div class="table-responsive">
+                    {systeminfo}
+                </div>
+            </div>
+            <div id="system-drive" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-ssh"></use>
+                        </svg>
+                    </span>
+                    Drive
+                </h2>
+                <div class="table-responsive">
+                    {drive}
+                </div>
+            </div>
+            <div id="system-product" class="section">
+                <h2>
+                    <span class="icon">
+                        <svg class="svg-icon">
+                            <use xlink:href="#icon-ssh"></use>
+                        </svg>
+                    </span>
+                    Product
+                </h2>
+                <div class="table-responsive">
+                    {product}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+
+</html>

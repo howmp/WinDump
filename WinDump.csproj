@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4DC5651B-AC64-449B-BC58-620086193035}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WinDump</RootNamespace>
+    <AssemblyName>WinDump</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cred\BrowserChromiumBased.cs" />
+    <Compile Include="Cred\Credential.cs" />
+    <Compile Include="Cred\DBeaver.cs" />
+    <Compile Include="Cred\FileZilla.cs" />
+    <Compile Include="Cred\FinalShell.cs" />
+    <Compile Include="Cred\MobaXterm.cs" />
+    <Compile Include="Cred\Navicat.cs" />
+    <Compile Include="Cred\OpenVPN.cs" />
+    <Compile Include="Cred\Putty.cs" />
+    <Compile Include="Cred\SecureCRT.cs" />
+    <Compile Include="Cred\TightVNC.cs" />
+    <Compile Include="Cred\UltraVNC.cs" />
+    <Compile Include="Cred\WinSCP.cs" />
+    <Compile Include="Cred\XManager.cs" />
+    <Compile Include="Directories.cs" />
+    <Compile Include="Files.cs" />
+    <Compile Include="Network\DNSCache.cs" />
+    <Compile Include="Network\Netstat.cs" />
+    <Compile Include="Network\Interface.cs" />
+    <Compile Include="Network\Route.cs" />
+    <Compile Include="Network\WIFI.cs" />
+    <Compile Include="Process.cs" />
+    <Compile Include="SystemInfo.cs" />
+    <Compile Include="Cred\RDP.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
