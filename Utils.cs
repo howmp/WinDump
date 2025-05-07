@@ -13,6 +13,18 @@ namespace WinDump
     {
         public const string CIMV2 = "root\\CIMV2";
         public const string StandardCimv2 = "root/StandardCimv2";
+        internal delegate  DataTable DtCall();
+        internal static string TryToHTML(DtCall call)
+        {
+            try
+            {
+                return ToHTML(call());
+            }
+            catch
+            {
+                return "";
+            }
+        }
         internal static string ToHTML(DataTable dt)
         {
             if (dt == null)
