@@ -11,6 +11,18 @@ namespace WinDump
     {
         static void Main(string[] args)
         {
+            try
+            {
+                DoMain();
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), ex.ToString());
+                Environment.Exit(1);
+            }
+        }
+        static void DoMain()
+        {
             var title = Interface.GetIP() + "_" + Environment.MachineName;
             var navicat = Navicat.GetNavicat(out var navicatkey);
             Dictionary<string, string> values = new Dictionary<string, string>
